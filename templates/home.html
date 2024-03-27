@@ -1,0 +1,6 @@
+{% for question in  questions  %}
+ {{question.question_text}}
+{% for choice in question.choices.all %}
+{{choice.title}}
+{% endfor %}
+{% endfor %}
