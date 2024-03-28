@@ -2,18 +2,32 @@
 from django.db import models
 
 class Quiz(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=255,blank=True,null=True)
+    description = models.TextField(blank=True,null=True)
 
     def __str__(self):
         return self.title
 
+
 class Question(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    question_text = models.CharField(max_length=100)
-    
+    quiz = models.ForeignKey(Quiz, related_name='questions', on_delete=models.CASCADE,blank=True,null=True)
+    text = models.TextField(blank=True,null=True)
+
+    def __str__(self):
+        return self.text
+
 
 class Choice(models.Model):
-    title = models.CharField(max_length=100,blank=True,null=True)  # optional field
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='choices')
-    is_selected = models.BooleanField()
+    question = models.ForeignKey(Question, related_name='choices', on_delete=models.CASCADE,blank=True,null=True)
+    text = models.CharField(max_length=255,blank=True,null=True)  # blank for optional choices
+    is_correct = models.BooleanField(default=False,blank=True,null=True)
 
+    def __str__(self):
+        return self.text
+    
+    
+    
+class Profile(models.Model):
+    score=models.IntegerField(default=0)
+    
+                                
