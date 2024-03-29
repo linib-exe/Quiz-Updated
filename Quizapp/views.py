@@ -5,28 +5,28 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from .models import Profile
-
+from django.http import HttpResponse
 
 @login_required(login_url="login")
 def home(request):
-    questions = Question.objects.all()
-    score = 0
-    if request.method == 'POST':
-        total_questions = Question.objects.count()
-        try:
-            profile = Profile.objects.get(user=request.user)
-        except:
-            return render(request,'home.html')
-
-        for question in questions:
-            selected_choice_id = request.POST.get(f'question{question.id}')
-            if selected_choice_id is not None:
-                correct_choice = Choice.objects.get(question=question, is_correct=True)
-                if int(selected_choice_id) == correct_choice.id:
-                    score += 1
-                    print(score)
-                    profile.score = score
-                    profile.save()
+    profile = Profile.objects.get(user=request.user)
+    if profile.played_before:
+        return HttpResponse("You have already played the game.")
+    else:
+        questions = Question.objects.all()
+        score = 0
+        if request.method == 'POST':
+            total_questions = Question.objects.count()
+            for question in questions:
+                selected_choice_id = request.POST.get(f'question{question.id}')
+                if selected_choice_id is not None:
+                    correct_choice = Choice.objects.get(question=question, is_correct=True)
+                    if int(selected_choice_id) == correct_choice.id:
+                        score += 1
+                        print(score)
+                        profile.score = score
+                        profile.played_before= True
+                        profile.save()
 
     return render(request, 'home.html', {'questions': questions,'score':score})
 

@@ -1,6 +1,6 @@
 
 from django.db import models
-from django.contrib.auth.models  import User
+from django.contrib.auth.models import User
 
 class Quiz(models.Model):
     title = models.CharField(max_length=255,blank=True,null=True)
@@ -31,5 +31,6 @@ class Choice(models.Model):
 class Profile(models.Model):
     score=models.IntegerField(default=0)
     user=models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
+    played_before = models.BooleanField(default=False)
     
                                 
