@@ -5,8 +5,8 @@ from .models import Quiz,Question,Choice,Profile
 admin.site.register(Quiz)
 admin.site.register(Question)
 admin.site.register(Choice)
-
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'score')
+admin.site.register(Profile)
+# @admin.register(Profile)
+# class ProfileAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'score')
 

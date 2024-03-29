@@ -13,7 +13,10 @@ def home(request):
     score = 0
     if request.method == 'POST':
         total_questions = Question.objects.count()
-        profile = Profile.objects.get(user=request.user)
+        try:
+            profile = Profile.objects.get(user=request.user)
+        except:
+            return render(request,'home.html')
 
         for question in questions:
             selected_choice_id = request.POST.get(f'question{question.id}')
